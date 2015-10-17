@@ -14,14 +14,11 @@ from downloads import Downloading
 from partidosweb import PartidosWeb
 
 HTML = ".html"
-miVersion = "SEF LiveScore - Version 0.5.0 - 20140403"
+miVersion = "SEF LiveScore - Version 0.6.0 - 20151017"
 iniurl = "url.ini"
 
-#contenedores = [ "td", "td", "td" ]
-#conte_clases = [ "fh", "fa", "fs" ]
 contenedores = [ "div", "div", "div", "div" ]
 conte_clases = [ "ply tright name", "ply name", "sco", "min"]
-
 
 
 class LiveScore():
@@ -41,7 +38,7 @@ class LiveScore():
         return data
 
     def ejecuta(self, data):
-        soup = bs4.BeautifulSoup(data)
+        soup = bs4.BeautifulSoup(data, "lxml")
         locales = soup.findAll(contenedores[0], { "class" : conte_clases[0] })
         visitantes = soup.findAll(contenedores[1], { "class" : conte_clases[1] })
         marcador = soup.findAll(contenedores[2], { "class" : conte_clases[2] })
@@ -60,7 +57,12 @@ class LiveScore():
                 print (p)
             except: pass
 
-
+    def buscar(self, equipo):
+        partidos_equipo = []
+        for pt in self.partidos:
+            if pt.esta_equipo(equipo):
+                partidos_equipo.append(pt)
+        return partidos_equipo
 
 class ini2urls():
     """ Recupera de ficheros INI el listado de URL a procesar """
@@ -97,4 +99,8 @@ if __name__ == '__main__':
 
     listadoURLs.listado()
     ls = LiveScore(keys, vlr)
-    ls.listadoPartidos()
+    print (len(ls.partidos))
+    pts = ls.buscar('real madrid')
+    for pt in pts:
+        print (pt)
+    # ls.listadoPartidos()

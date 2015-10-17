@@ -1,4 +1,9 @@
-﻿import requests
+﻿# coding: utf-8
+from __future__ import unicode_literals
+from __future__ import print_function
+__author__ = 'dtrillo'
+
+import requests
 
 class Downloading:
     """ Clase para recuperar código HTML de una URL """

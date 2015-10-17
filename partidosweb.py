@@ -1,4 +1,8 @@
-﻿
+﻿# coding: utf-8
+from __future__ import unicode_literals
+from __future__ import print_function
+__author__ = 'dtrillo'
+
 import unicodedata  # Tildes http://www.leccionespracticas.com/uncategorized/eliminar-tildes-con-python-solucionado/
 
 nl = "\n"
@@ -53,18 +57,13 @@ class PartidosWeb:
         else:
             return ''
 
-    def dato(self):
-        return {"idpartido": self._idpartido, "goll": self.goll,
-                "golv": self.golv, "dgol": self.goll - self.golv,
-                "minuto": self.minuto, "signo": self.valor_1x2(),
-                "actualizado": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    def esta_equipo(self, equipo):
+        return equipo.upper() == self.eq_local.upper() or equipo.upper() == self.eq_vis.upper()
 
     def __str__(self):
-        tmp = self.eq_local + " - " + self.eq_vis
-        if len(self.res)>0:
-            tmp += " ==> ( " + str(self.goll) + " - " + str(self.golv) + " ) --> " + self.valor_1x2()
-        else:
-            if self.res:
-                tmp += str(self.goll) + " - " + str(self.golv)
-        return tmp + " - %s" % self.estado[self.idestado]
+        tmp = "%s %s - %s %s" % (self.eq_local, self.goll, self.golv, self.eq_vis)
+        t_estado = self.minuto if self.idestado == 1 else self.estado[self.idestado]
+        if self.estado > 0:
+            t_estado += " ==> (%s) " % (self.valor_1x2())
+        return tmp + " - %s" % t_estado
 
